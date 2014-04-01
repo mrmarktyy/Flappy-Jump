@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title></title>
+    <style type="text/css">
+        .container {
+            width: 980px;
+            margin: 0 auto;
+        }
+        #game {
+            width: 300px;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            background: url('image/bg.png');
+            background-size: 100% 150%;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #eee;
+            z-index: 12;
+            opacity: 0.8;
+            display: none;
+        }
+        .overlay .play-again {
+            top: 180px;
+            width: 100px;
+            padding: 10px;
+            position: relative;
+            border: 2px solid;
+            margin: 0 auto;
+            text-align: center;
+            cursor: pointer;
+        }
+        .overlay .play-again:hover {
+            background-color: #dedede;
+        }
+        #character {
+            width: 42px;
+            height: 30px;
+            position: absolute;
+            bottom: 0;
+            left: 145px;
+            transition: left 50ms linear;
+            background: url('image/flappy.png') no-repeat -336px -31px;
+            background-size: 1024px 1024px;
+        }
+        #character.left {
+            -moz-transform: scaleX(-1);
+            -o-transform: scaleX(-1);
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
+            filter: FlipH;
+            -ms-filter: "FlipH";
+        }
+        #score {
+            position: absolute;
+            top: 0;
+            color: white;
+            z-index: 10;
+        }
+        .stair {
+            position: absolute;
+            background-color: #efefef;
+            height: 15px;
+        }
+        #fork-me {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://github.com/mrmarktyy/mBounce">
+            <img id="fork-me" alt="Fork me on GitHub" src="image/forkme.png">
+        </a>
+        <div id="game">
+            <div class="overlay">
+                <div class="play-again">Play Again</div>
+            </div>
+            <div id="score">Score:<span>0</span></div>
+            <div id="character"></div>
+        </div>
+    </div>
+    <script src="jquery.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        $(function () {
+            var myGame = new Game().start();
+        });
+    </script>
+</body>
+</html>
