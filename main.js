@@ -17,7 +17,7 @@ $(function () {
         this.config = {
             boardWidth          : 300,
             boardHeight         : 400,
-            characterWidth      : 30,
+            characterWidth      : 42,
             characterHeight     : 30,
 
             leapLeft            : 10,
@@ -37,12 +37,7 @@ $(function () {
             this.$character = $('#character');
             this.$game = $('#game');
             this.$score = $('#score span');
-            this.status = {
-                score: 0,
-                isGameOver: true,
-                bottom: this.config.leapUp,
-                stairsInfo: []
-            };
+            this.resetStatus();
             return this;
         };
 
@@ -50,6 +45,7 @@ $(function () {
             this.status.isGameOver = false;
             this.drawStairs();
             this.gameLoop();
+            this.characterFly();
             this.leap();
             return this;
         };
@@ -93,8 +89,9 @@ $(function () {
         }
 
         function removeStair (index) {
-            self.status.stairsInfo.forEach(function (stair) {
+            self.status.stairsInfo.forEach(function (stair, key) {
                 if (stair.index === index) {
+                    self.status.stairsInfo.splice(key, 1);
                     $('#stair-' + index).remove();
                 }
             });
@@ -141,9 +138,28 @@ $(function () {
                 if (!self.status.isGameOver) {
                     rAF(gameLoop);
                 }
-                self.gameLRController();
-                self.gameStairDownCheck();
+                self.characterHorizontalMove();
+                self.stairUpCheck();
             })();
+        };
+
+        this.characterFly = function () {
+            var direction = true;
+            var fly = setInterval(function () {
+                if (self.status.isGameOver) {
+                    clearInterval(fly);
+                    return;
+                }
+                var status = parseInt(self.$character.attr('class').match(/\d/)[0], 10);
+                var num;
+                if (status === 0 || status === 2) {
+                    num = 1;
+                    direction = !direction;
+                } else {
+                    num = direction ? 0 : 2;
+                }
+                self.$character.removeClass('status-0 status-1 status-2').addClass('status-' + num);
+            }, 200);
         };
 
         this.leap = function () {
@@ -185,7 +201,6 @@ $(function () {
         };
 
         this.leapDown = function () {
-            console.log('leapDown duration', this.config.leapDownDuration * this.status.bottom / this.config.leapUp);
             this.$character.delay(this.status.delay).animate({
                     bottom: 0
                 }, {
@@ -204,7 +219,7 @@ $(function () {
                 });
         };
 
-        this.gameLRController = function () {
+        this.characterHorizontalMove = function () {
             var left = getPX(this.$character.css('left'));
             var l;
             // Go Left
@@ -224,7 +239,7 @@ $(function () {
             this.$character.css('left', l);
         };
 
-        this.gameStairDownCheck = function () {
+        this.stairUpCheck = function () {
             if (this.status.isGoingDown) {
                 var curBottom = getPX(this.$character.css('bottom'));
                 var curLeft = getPX(this.$character.css('left'));
@@ -248,8 +263,27 @@ $(function () {
         this.gameOver = function () {
             $('.overlay', this.$game).show();
             this.status.isGameOver = true;
+            this.$game.on('click', '.play-again', function () {
+                self.restart();
+                $('.overlay', self.$game).hide();
+            });
         };
 
+        this.restart = function () {
+            $('.stair', this.$game).remove();
+            this.$score.html(0);
+            this.resetStatus();
+            this.start();
+        };
+
+        this.resetStatus = function () {
+            this.status = {
+                score: 0,
+                isGameOver: true,
+                bottom: this.config.leapUp,
+                stairsInfo: []
+            };
+        };
 
         /************* Util Methods *************/
 
