@@ -20,19 +20,24 @@ $(function () {
             characterWidth      : 42,
             characterHeight     : 30,
 
-            leapLeft            : 10,
             leapUp              : 100,
-            leapUpDruation      : 600,
-            leapDownDuration    : 600,
+            leapDuration        : 0.6,
+            leapLeft            : 10,
+            leapInterval        : 40,
 
             stairHeight         : 15,
             stairHeightDiff     : 60,
             stairToleranceUp    : 5,
-            stairToleranceDown  : 5,
+            stairToleranceDown  : 15,
             stairInitNumber     : 8
+
         };
 
         this.init = function (options) {
+            var inital = getVA(this.config.leapDuration, this.config.leapUp);
+            this.config.v0 = inital.v;
+            this.config.a_down = inital.a_down;
+            this.config.a_up = inital.a_up;
             this.registerKeyEvents();
             this.$character = $('#character');
             this.$game = $('#game');
@@ -70,12 +75,32 @@ $(function () {
             this.$game.prepend(stairs);
         };
 
+        this.getLastStair = function () {
+            return this.status.stairsInfo[this.status.stairsInfo.length - 1];
+        };
+
+        this.removeStair = function (index) {
+            this.status.stairsInfo.forEach(function (stair, key) {
+                if (stair.index === index) {
+                    self.status.stairsInfo.splice(key, 1);
+                    $('#stair-' + index).remove();
+                }
+            });
+        };
+
+        this.stairsMoveDown = function (dh) {
+            this.status.stairsInfo.forEach(function (stair) {
+                $('#stair-' + stair.index).css('bottom', (stair.bottom - dh) + 'px');
+            });
+        };
+
         function createStair (index, bottom) {
             var width = getRandomInt(40, 100);
             var left = getRandomInt(0, 200);
             self.status.stairsInfo.push({
                 index: index,
-                bottom: bottom + self.config.stairHeight,
+                bottom: bottom,
+                top: bottom + self.config.stairHeight,
                 left_min: left,
                 left_max: left + width
             });
@@ -88,40 +113,30 @@ $(function () {
                 });
         }
 
-        function removeStair (index) {
-            self.status.stairsInfo.forEach(function (stair, key) {
-                if (stair.index === index) {
-                    self.status.stairsInfo.splice(key, 1);
-                    $('#stair-' + index).remove();
+        this.updateStairsInfo = function () {
+            var toBeRemoved = [];
+            this.status.stairsInfo.forEach(function (stair) {
+                var bottom = getPX($('#stair-' + stair.index).css('bottom'));
+                if (bottom < 0) {
+                    toBeRemoved.push(stair);
+                } else {
+                    stair.bottom = bottom;
+                    stair.top = bottom + self.config.stairHeight;
                 }
             });
-        }
-
-        function updateStairs (diff, duration) {
-            self.status.stairsInfo.forEach(function (stair) {
-                stair.bottom -= diff;
-                $('#stair-' + stair.index).animate({
-                    bottom: stair.bottom
-                }, {
-                    duration: duration,
-                    easing: 'linear',
-                    complete: function () {
-                        if (stair.bottom < 0) {
-                            removeStair(stair.index);
-                            var lastStair = self.status.stairsInfo[self.status.stairsInfo.length - 1];
-                            var newStair = createStair(lastStair.index + 1, lastStair.bottom + self.config.stairHeightDiff);
-                            self.$game.prepend(newStair);
-                        }
-                    }
-                });
+            toBeRemoved.forEach(function (stair) {
+                self.removeStair(stair.index);
+                var lastStair = self.getLastStair();
+                var newStair = createStair(lastStair.index + 1, lastStair.top + self.config.stairHeightDiff);
+                self.$game.prepend(newStair);
             });
-        }
+        };
 
-        function checkStairUp (bottom, left) {
+        this.checkStairUp = function (bottom, left) {
             var result;
-            self.status.stairsInfo.forEach(function (stair) {
-                if (bottom <= stair.bottom + self.config.stairToleranceUp &&
-                    bottom >= stair.bottom - self.config.stairHeight - self.config.stairToleranceDown &&
+            this.status.stairsInfo.forEach(function (stair) {
+                if (bottom <= stair.top + self.config.stairToleranceUp &&
+                    bottom >= stair.top - self.config.stairToleranceDown &&
                     left > stair.left_min &&
                     left < stair.left_max) {
                     result = stair;
@@ -129,7 +144,7 @@ $(function () {
                 }
             });
             return result;
-        }
+        };
 
         /************* Stairs Management End *************/
 
@@ -139,7 +154,6 @@ $(function () {
                     rAF(gameLoop);
                 }
                 self.characterHorizontalMove();
-                self.stairUpCheck();
             })();
         };
 
@@ -163,60 +177,59 @@ $(function () {
         };
 
         this.leap = function () {
-            this.leapUp();
-            this.leapDown();
+            this.interval = setInterval(function () {
+                if (self.status.isChanged) {
+                    self.status.t0 = +new Date();
+                    self.status.curBottom = getPX(self.$character.css('bottom'));
+                    self.status.isChanged = false;
+                }
+                if (self.status.isGoingDown) {
+                    self.leapDown();
+                } else {
+                    self.leapUp();
+                }
+                if (self.status.isGameOver) {
+                    clearInterval(self.interval);
+                }
+            }, this.config.leapInterval);
         };
 
         this.leapUp = function () {
-            var curBottom = getPX(this.$character.css('bottom')),
-                isStairMove = false,
-                up, duration, downStairs, durationStairs;
-            if ((curBottom + this.config.leapUp) < this.config.boardHeight / 2) {
-                up = this.config.leapUp;
-                duration = this.config.leapUpDruation;
-                this.status.delay = 0;
+            var dt  = (+new Date() - this.status.t0) / 1000,
+                v   = this.config.v0 + this.config.a_up * dt,
+                s   = this.config.v0 * dt + this.config.a_up * dt * dt / 2;
+            if (v < 0) {
+                this.updateStairsInfo();
+                this.status.isGoingDown = true;
+                this.status.isChanged = true;
             } else {
-                isStairMove = true;
-                up = this.config.boardHeight / 2 - curBottom;
-                duration = Math.floor(this.config.leapUpDruation * up / this.config.leapUp);
-                downStairs = this.config.leapUp - up;
-                this.status.delay = this.config.leapUpDruation - duration;
+                var dh = Math.ceil(this.status.curBottom + s - this.config.boardHeight / 2);
+                if (dh > 0) {
+                    this.$character.css('bottom', (this.config.boardHeight / 2) + 'px');
+                    this.stairsMoveDown(dh);
+                } else {
+                    this.$character.css('bottom', (this.status.curBottom + s) + 'px');
+                }
             }
-            this.$character
-                .animate({
-                    bottom: '+=' + up
-                }, {
-                    duration: duration,
-                    easing: 'swing',
-                    start: function () {
-                        self.status.isGoingDown = false;
-                    },
-                    complete: function () {
-                        self.status.bottom = curBottom + up;
-                        if (isStairMove) {
-                            updateStairs(downStairs, self.status.delay);
-                        }
-                    }
-                });
         };
 
         this.leapDown = function () {
-            this.$character.delay(this.status.delay).animate({
-                    bottom: 0
-                }, {
-                    duration: this.config.leapDownDuration * this.status.bottom / this.config.leapUp,
-                    easing: 'swing',
-                    start: function () {
-                        self.status.isGoingDown = true;
-                    },
-                    complete: function () {
-                        if (self.status.score > 0) {
-                            self.gameOver();
-                        } else {
-                            self.leap();
-                        }
-                    }
-                });
+            var dt  = (+new Date() - this.status.t0) / 1000,
+                s   = this.config.a_down * dt * dt / 2;
+
+            var bottom = this.status.curBottom - s;
+            if (bottom < 0) {
+                this.$character.css('bottom', 0);
+                if (this.status.score > 0) {
+                    this.gameOver();
+                } else {
+                    this.status.isGoingDown = false;
+                    this.status.isChanged = true;
+                }
+            } else {
+                this.$character.css('bottom', bottom + 'px');
+                this.stairUpCheck(bottom);
+            }
         };
 
         this.characterHorizontalMove = function () {
@@ -239,24 +252,21 @@ $(function () {
             this.$character.css('left', l);
         };
 
-        this.stairUpCheck = function () {
-            if (this.status.isGoingDown) {
-                var curBottom = getPX(this.$character.css('bottom'));
-                var curLeft = getPX(this.$character.css('left'));
-                var result = checkStairUp(curBottom, curLeft);
-                if (result) {
-                    this.$character.stop();
-                    this.updateScore(result);
-                    this.leap();
-                }
+        this.stairUpCheck = function (curBottom) {
+            var curLeft = getPX(this.$character.css('left'));
+            var result = this.checkStairUp(curBottom, curLeft + this.config.characterWidth / 2);
+            if (result) {
+                this.updateScore(result);
+                this.status.isGoingDown = false;
+                this.status.isChanged = true;
             }
         };
 
         this.updateScore = function (stair) {
-            var score = parseInt(this.$score.html(), 10);
-            if (score < stair.index) {
-                this.status.score = stair.index;
-                this.$score.html(stair.index);
+            var score = stair.index + 1;
+            if (this.status.score < score) {
+                this.status.score = score;
+                this.$score.html(score);
             }
         };
 
@@ -270,8 +280,6 @@ $(function () {
         };
 
         this.restart = function () {
-            $('.stair', this.$game).remove();
-            this.$score.html(0);
             this.resetStatus();
             this.start();
         };
@@ -280,9 +288,18 @@ $(function () {
             this.status = {
                 score: 0,
                 isGameOver: true,
-                bottom: this.config.leapUp,
+                isGoingDown: false,
+                isChanged: true,
+                t0: +new Date(),
+                bottom: 0,
                 stairsInfo: []
             };
+            $('.stair', this.$game).remove();
+            this.$score.html(0);
+            this.$character.attr('class', 'status-1').css({
+                bottom: '0px',
+                left: '145px'
+            });
         };
 
         /************* Util Methods *************/
@@ -293,6 +310,14 @@ $(function () {
 
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getVA(t, s) {
+            return {
+                a_up: Math.floor(-2 * s / t / t),
+                a_down: Math.floor(2 * s / t / t),
+                v: Math.floor(2 * s / t)
+            };
         }
 
         this.init(options);
