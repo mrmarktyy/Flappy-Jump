@@ -1,10 +1,18 @@
-## TODOs
+## Demo
+
+[Please see demo here](http://games.tantanguanguan.com/mBounce/)
+
+## Roadmaps
 
 * ~~Fix play again~~
 * ~~Optimize controlling experience~~
 * ~~Optimize `stairUpCheck` methode~~
-* Add moving stairs
 * ~~Add grunt~~
+* Add moving stairs
 * Add touch device support
-* App Store and Google Play release
-* Add Game board support
+* Add loading and introduction screen
+* Save max score locally
+* Add more interesting features
+* Add Game Board support
+* Release to App Store and Google Play
+
