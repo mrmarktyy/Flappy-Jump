@@ -1,8 +1,8 @@
 ## TODOs
 
-* Fix play again
-* Optimize controlling experience
-* Optimize `stairUpCheck` method
+* ~~Fix play again~~
+* ~~Optimize controlling experience~~
+* ~~Optimize `stairUpCheck` methode~~
 * Add moving stairs
 * ~~Add grunt~~
 * Add touch device support

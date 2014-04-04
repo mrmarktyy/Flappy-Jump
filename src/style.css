@@ -11,7 +11,7 @@ body * {
     position: relative;
     overflow: hidden;
     margin: 0 auto;
-    background: url('image/bg.png');
+    background: url('../image/bg.png');
     background-size: 100% 150%;
 }
 .overlay {
@@ -55,7 +55,7 @@ body * {
     bottom: 0;
     left: 145px;
     transition: left 50ms linear, bottom 50ms ease;
-    background: url('image/flappy.png') no-repeat;
+    background: url('../image/flappy.png') no-repeat;
     background-size: 1024px 1024px;
 }
 #character.left {
@@ -86,6 +86,7 @@ body * {
     position: absolute;
     background-color: #bada55;
     height: 15px;
+    border-radius: 8px;
     transition: bottom 20ms linear;
 }
 #fork-me {

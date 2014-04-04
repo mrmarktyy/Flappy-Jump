@@ -15,14 +15,14 @@ module.exports = function (grunt) {
                 banner: bannerContent
             },
             target: {
-                src: ['main.js'],
+                src: ['src/main.js'],
                 dest: 'dist/main.min.js'
             }
         },
 
         cssmin: {
             minify: {
-                src: 'style.css',
+                src: 'src/style.css',
                 dest: 'dist/style.min.css'
             }
         }
