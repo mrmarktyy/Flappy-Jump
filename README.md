@@ -1,6 +1,8 @@
-## Demo
+## Introduction
 
-[Please try and play the demo here](http://games.tantanguanguan.com/mBounce/)
+A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and Android touch devices.
+
+[Please try and play the game here](http://games.tantanguanguan.com/mBounce/)
 
 ## Roadmaps
 
@@ -12,6 +14,7 @@
 
 ## CHANGELOG
 
+* ~~Update project demo homepage~~
 * ~~Add audio support~~
 
 **v0.2.0**
