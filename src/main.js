@@ -7,7 +7,7 @@ $(function () {
             return  window.requestAnimationFrame   ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame    ||
-                function( callback ){
+                function(callback){
                     window.setTimeout(callback, 1000 / 60);
                 };
         })(),
@@ -35,22 +35,33 @@ $(function () {
             stairToleranceUp    : 5,
             stairToleranceDown  : 15,
             stairNumber         : 8,
+            stairMoveableP      : 40,
+            stairMoveSpeed      : 4,
 
             wingDuration        : 100
         };
 
         this.init = function (options) {
+            this.setConfig();
+            this.setDOM();
+            this.registerEvents();
+            this.resetStatus();
+            return this;
+        };
+
+        this.setConfig = function () {
             var inital = getVA(this.config.leapDuration, this.config.leapUp);
             this.config.v0 = inital.v;
             this.config.a_down = inital.a_down;
             this.config.a_up = inital.a_up;
+        };
+
+        this.setDOM = function () {
             this.$character = $('#character');
             this.$game = $('#game');
             this.$score = $('#score span');
+            this.$best = $('#best span');
             this.$touchzone = $('#touchzone');
-            this.registerEvents();
-            this.resetStatus();
-            return this;
         };
 
         this.start = function () {
@@ -62,19 +73,25 @@ $(function () {
             return this;
         };
 
+        this.restart = function () {
+            this.resetStatus();
+            this.start();
+        };
+
         this.registerEvents = function () {
-            window.addEventListener('keydown', function(e){
+            window.addEventListener('keydown', function(e) {
                 keyState[e.keyCode || e.which] = true;
             }, true);
 
-            window.addEventListener('keyup', function(e){
+            window.addEventListener('keyup', function(e) {
                 keyState[e.keyCode || e.which] = false;
             }, true);
             this.$touchzone.on('touchstart', function (e) {
                 if ($(e.target).hasClass('left')) {
                     touchState['left'] = true;
                     touchState['right'] = false;
-                } else if ($(e.target).hasClass('right')) {
+                }
+                if ($(e.target).hasClass('right')) {
                     touchState['right'] = true;
                     touchState['left'] = false;
                 }
@@ -82,10 +99,31 @@ $(function () {
             this.$touchzone.on('touchend', function (e) {
                 if ($(e.target).hasClass('left')) {
                     touchState['left'] = false;
-                } else if ($(e.target).hasClass('right')) {
+                }
+                if ($(e.target).hasClass('right')) {
                     touchState['right'] = false;
                 }
             });
+        };
+
+        this.resetStatus = function () {
+            this.status = {
+                score: 0,
+                isGameOver: true,
+                isGoingDown: false,
+                isChanged: true,
+                t0: +new Date(),
+                bottom: 0,
+                stairsInfo: []
+            };
+            $('.stair', this.$game).remove();
+            this.$score.html(0);
+            this.$best.html(this.getBest());
+            this.$character
+                .attr('class', 'status-1')
+                .css({
+                    bottom: 0
+                });
         };
 
         /************* Stairs Management *************/
@@ -105,13 +143,19 @@ $(function () {
         this.createStair = function (index, bottom) {
             var width = getRandomInt(this.config.stairWidthMin, this.config.stairWidthMax);
             var left = getRandomInt(this.config.stairLeftMin, this.config.stairLeftMax);
-            this.status.stairsInfo.push({
+            var stair = {
                 index: index,
                 bottom: bottom,
                 top: bottom + this.config.stairHeight,
+                width: width,
                 left_min: left,
                 left_max: left + width
-            });
+            };
+            if (index > 10 && getRandomInt(1, 100) <= this.config.stairMoveableP) {
+                stair.moveable = true;
+                stair.direction = width % 2 ? true : false; // true: go left, false: go right
+            }
+            this.status.stairsInfo.push(stair);
             return $('<div>').addClass('stair')
                 .attr('id', 'stair-' + index)
                 .css({
@@ -169,14 +213,42 @@ $(function () {
             return result;
         };
 
+        this.moveableStairs = function () {
+            this.status.stairsInfo.forEach(function (stair) {
+                if (stair.moveable) {
+                    var left = stair.left_min;
+                    var l;
+                    if (stair.direction) {
+                        if (left > self.config.stairMoveSpeed) {
+                            l = left - self.config.stairMoveSpeed;
+                        } else {
+                            l = 0;
+                            stair.direction = !stair.direction;
+                        }
+                    } else {
+                        if (left < self.config.boardWidth - stair.width - self.config.stairMoveSpeed) {
+                            l = left + self.config.stairMoveSpeed;
+                        } else {
+                            l = self.config.boardWidth - stair.width;
+                            stair.direction = !stair.direction;
+                        }
+                    }
+                    $('#stair-' + stair.index).css('left', l + 'px');
+                    stair.left_min = l;
+                    stair.left_max = l + stair.width;
+                }
+            });
+        };
+
         /************* Stairs Management End *************/
 
         this.gameLoop = function () {
-            (function gameLoop () {
+            (function loop () {
                 if (!self.status.isGameOver) {
-                    rAF(gameLoop);
+                    rAF(loop);
                 }
                 self.characterHorizontalMove();
+                self.moveableStairs();
             })();
         };
 
@@ -258,12 +330,10 @@ $(function () {
         this.characterHorizontalMove = function () {
             var left = getPX(this.$character.css('left'));
             var l;
-            // Go Left
             if (keyState[37] || keyState[65] || touchState['left']) {
                 this.$character.addClass('left');
                 l = left >= this.config.leapLeft ? left - this.config.leapLeft : 0;
             }
-            // Go Right
             if (keyState[39] || keyState[68] || touchState['right']) {
                 this.$character.removeClass('left');
                 if (left <= this.config.boardWidth - this.config.characterWidth - this.config.leapLeft) {
@@ -291,39 +361,33 @@ $(function () {
                 this.status.score = score;
                 this.$score.html(score);
             }
+            if (this.getBest() < score) {
+                this.setBest(score);
+            }
         };
 
         this.gameOver = function () {
             $('.overlay', this.$game).show();
+            $('.overlay .game-over span', this.$game).html(this.status.score);
             this.status.isGameOver = true;
-            this.$game.on('click', '.play-again', function () {
+            this.$game.on('click', '.again', function () {
                 self.restart();
                 $('.overlay', self.$game).hide();
             });
         };
 
-        this.restart = function () {
-            this.resetStatus();
-            this.start();
+        this.getBest = function () {
+            if (localStorage) {
+                return localStorage.getItem('best') || 0;
+            }
+            return 0;
         };
 
-        this.resetStatus = function () {
-            this.status = {
-                score: 0,
-                isGameOver: true,
-                isGoingDown: false,
-                isChanged: true,
-                t0: +new Date(),
-                bottom: 0,
-                stairsInfo: []
-            };
-            $('.stair', this.$game).remove();
-            this.$score.html(0);
-            this.$character
-                .attr('class', 'status-1')
-                .css({
-                    bottom: '0px'
-                });
+        this.setBest = function (score) {
+            if (localStorage) {
+                localStorage.setItem('best', score);
+            }
+            this.$best.html(score);
         };
 
         /************* Util Methods *************/

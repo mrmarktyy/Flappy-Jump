@@ -13,6 +13,8 @@ body * {
     margin: 0 auto;
     background: url('../image/bg.png');
     background-size: 400px 665px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 .overlay {
     position: absolute;
@@ -23,30 +25,31 @@ body * {
     background: #eee;
     z-index: 12;
     opacity: 0.8;
+    color: #333;
     display: none;
 }
-.overlay .play-again {
-    top: 180px;
+.overlay .again {
+    top: 190px;
     width: 100px;
     padding: 10px;
     position: relative;
     border: 2px solid #333;
-    color: #333;
     margin: 0 auto;
     text-align: center;
     cursor: pointer;
 }
-.overlay .play-again:hover {
+.overlay .again:hover {
     background-color: #ddd;
 }
 .overlay .game-over {
     top: 170px;
-    width: 200px;
-    font-size: 30px;
-    color: #333;
+    font-size: 40px;
     position: relative;
-    margin: 0 auto;
     text-align: center;
+}
+.overlay .game-over p {
+    margin: 0;
+    font-size: 30px;
 }
 #character {
     width: 42px;
@@ -75,12 +78,18 @@ body * {
 #character.status-2 {
     background-position: -336px -61px;
 }
-#score {
-    position: absolute;
-    padding: 5px;
-    top: 0;
-    color: white;
+.score {
+    position: relative;
     z-index: 10;
+    color: white;
+}
+.score > div {
+    position: absolute;
+    top: 0;
+    padding: 2px;
+}
+#best {
+    right: 0;
 }
 #touchzone {
     height: 100%;
@@ -103,7 +112,7 @@ body * {
     background-color: #bada55;
     height: 15px;
     border-radius: 8px;
-    transition: bottom 20ms linear;
+    transition: left 40ms linear, bottom 20ms linear;
 }
 #fork-me {
     position: absolute;
