@@ -6,13 +6,13 @@ body * {
     margin: 0 auto;
 }
 #game {
-    width: 300px;
-    height: 400px;
+    width: 320px;
+    height: 480px;
     position: relative;
     overflow: hidden;
     margin: 0 auto;
     background: url('../image/bg.png');
-    background-size: 100% 150%;
+    background-size: 400px 665px;
 }
 .overlay {
     position: absolute;

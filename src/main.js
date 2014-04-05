@@ -16,8 +16,8 @@ $(function () {
             self = this;
 
         this.config = {
-            boardWidth          : 300,
-            boardHeight         : 400,
+            boardWidth          : 320,
+            boardHeight         : 480,
             characterWidth      : 42,
             characterHeight     : 30,
 
@@ -29,7 +29,7 @@ $(function () {
             stairWidthMin       : 40,
             stairWidthMax       : 100,
             stairLeftMin        : 0,
-            stairLeftMax        : 200, // boardWidth - stairWidthMax
+            stairLeftMax        : 220, // boardWidth - stairWidthMax
             stairHeight         : 15,
             stairHeightDiff     : 60,
             stairToleranceUp    : 5,
