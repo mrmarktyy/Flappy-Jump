@@ -82,6 +82,22 @@ body * {
     color: white;
     z-index: 10;
 }
+#touchzone {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+#touchzone .left {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+}
+#touchzone .right {
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    position: absolute;
+}
 .stair {
     position: absolute;
     background-color: #bada55;

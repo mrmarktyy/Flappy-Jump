@@ -12,6 +12,7 @@ $(function () {
                 };
         })(),
             keyState = {},
+            touchState = {},
             self = this;
 
         this.config = {
@@ -23,14 +24,19 @@ $(function () {
             leapUp              : 100,
             leapDuration        : 0.6,
             leapLeft            : 10,
-            leapInterval        : 40,
+            leapInterval        : 30,
 
+            stairWidthMin       : 40,
+            stairWidthMax       : 100,
+            stairLeftMin        : 0,
+            stairLeftMax        : 200, // boardWidth - stairWidthMax
             stairHeight         : 15,
             stairHeightDiff     : 60,
             stairToleranceUp    : 5,
             stairToleranceDown  : 15,
-            stairInitNumber     : 8
+            stairNumber         : 8,
 
+            wingDuration        : 100
         };
 
         this.init = function (options) {
@@ -38,10 +44,11 @@ $(function () {
             this.config.v0 = inital.v;
             this.config.a_down = inital.a_down;
             this.config.a_up = inital.a_up;
-            this.registerKeyEvents();
             this.$character = $('#character');
             this.$game = $('#game');
             this.$score = $('#score span');
+            this.$touchzone = $('#touchzone');
+            this.registerEvents();
             this.resetStatus();
             return this;
         };
@@ -55,7 +62,7 @@ $(function () {
             return this;
         };
 
-        this.registerKeyEvents = function () {
+        this.registerEvents = function () {
             window.addEventListener('keydown', function(e){
                 keyState[e.keyCode || e.which] = true;
             }, true);
@@ -63,20 +70,55 @@ $(function () {
             window.addEventListener('keyup', function(e){
                 keyState[e.keyCode || e.which] = false;
             }, true);
+            this.$touchzone.on('touchstart', function (e) {
+                if ($(e.target).hasClass('left')) {
+                    touchState['left'] = true;
+                    touchState['right'] = false;
+                } else if ($(e.target).hasClass('right')) {
+                    touchState['right'] = true;
+                    touchState['left'] = false;
+                }
+            });
+            this.$touchzone.on('touchend', function (e) {
+                if ($(e.target).hasClass('left')) {
+                    touchState['left'] = false;
+                } else if ($(e.target).hasClass('right')) {
+                    touchState['right'] = false;
+                }
+            });
         };
 
         /************* Stairs Management *************/
 
         this.drawStairs = function () {
             var stairs = [];
-            for(var i = 0; i < this.config.stairInitNumber; i++) {
-                stairs.push(createStair(i, (i + 1) * this.config.stairHeightDiff));
+            for(var i = 0; i < this.config.stairNumber; i++) {
+                stairs.push(this.createStair(i, (i + 1) * this.config.stairHeightDiff));
             }
             this.$game.prepend(stairs);
         };
 
         this.getLastStair = function () {
             return this.status.stairsInfo[this.status.stairsInfo.length - 1];
+        };
+
+        this.createStair = function (index, bottom) {
+            var width = getRandomInt(this.config.stairWidthMin, this.config.stairWidthMax);
+            var left = getRandomInt(this.config.stairLeftMin, this.config.stairLeftMax);
+            this.status.stairsInfo.push({
+                index: index,
+                bottom: bottom,
+                top: bottom + this.config.stairHeight,
+                left_min: left,
+                left_max: left + width
+            });
+            return $('<div>').addClass('stair')
+                .attr('id', 'stair-' + index)
+                .css({
+                    bottom: bottom + 'px',
+                    width: width,
+                    left: left
+                });
         };
 
         this.removeStair = function (index) {
@@ -94,25 +136,6 @@ $(function () {
             });
         };
 
-        function createStair (index, bottom) {
-            var width = getRandomInt(40, 100);
-            var left = getRandomInt(0, 200);
-            self.status.stairsInfo.push({
-                index: index,
-                bottom: bottom,
-                top: bottom + self.config.stairHeight,
-                left_min: left,
-                left_max: left + width
-            });
-            return $('<div>').addClass('stair')
-                .attr('id', 'stair-' + index)
-                .css({
-                    bottom: bottom + 'px',
-                    width: width,
-                    left: left
-                });
-        }
-
         this.updateStairsInfo = function () {
             var toBeRemoved = [];
             this.status.stairsInfo.forEach(function (stair) {
@@ -127,7 +150,7 @@ $(function () {
             toBeRemoved.forEach(function (stair) {
                 self.removeStair(stair.index);
                 var lastStair = self.getLastStair();
-                var newStair = createStair(lastStair.index + 1, lastStair.top + self.config.stairHeightDiff);
+                var newStair = self.createStair(lastStair.index + 1, lastStair.top + self.config.stairHeightDiff);
                 self.$game.prepend(newStair);
             });
         };
@@ -173,7 +196,7 @@ $(function () {
                     num = direction ? 0 : 2;
                 }
                 self.$character.removeClass('status-0 status-1 status-2').addClass('status-' + num);
-            }, 200);
+            }, this.config.wingDuration);
         };
 
         this.leap = function () {
@@ -236,12 +259,12 @@ $(function () {
             var left = getPX(this.$character.css('left'));
             var l;
             // Go Left
-            if (keyState[37] || keyState[65]) {
+            if (keyState[37] || keyState[65] || touchState['left']) {
                 this.$character.addClass('left');
                 l = left >= this.config.leapLeft ? left - this.config.leapLeft : 0;
             }
             // Go Right
-            if (keyState[39] || keyState[68]) {
+            if (keyState[39] || keyState[68] || touchState['right']) {
                 this.$character.removeClass('left');
                 if (left <= this.config.boardWidth - this.config.characterWidth - this.config.leapLeft) {
                     l = left + this.config.leapLeft;
@@ -296,10 +319,11 @@ $(function () {
             };
             $('.stair', this.$game).remove();
             this.$score.html(0);
-            this.$character.attr('class', 'status-1').css({
-                bottom: '0px',
-                left: '145px'
-            });
+            this.$character
+                .attr('class', 'status-1')
+                .css({
+                    bottom: '0px'
+                });
         };
 
         /************* Util Methods *************/

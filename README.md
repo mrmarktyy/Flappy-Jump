@@ -9,7 +9,7 @@
 * ~~Optimize `stairUpCheck` methode~~
 * ~~Add grunt~~
 * Add moving stairs
-* Add touch device support
+* ~~Add touch device support~~
 * Add loading and introduction screen
 * Save max score locally
 * Add more interesting features
