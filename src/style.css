@@ -12,6 +12,9 @@ body {
     padding: 30px 0;
     width: 720px;
 }
+.header .container a {
+    color: white;
+}
 .container {
     width: 980px;
     margin: 0 auto;
