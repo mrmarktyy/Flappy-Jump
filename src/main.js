@@ -62,6 +62,8 @@ $(function () {
             this.$score = $('#score span');
             this.$best = $('#best span');
             this.$touchzone = $('#touchzone');
+            this.audioWing = document.getElementById('audio-wing');
+            this.audioHit = document.getElementById('audio-hit');
         };
 
         this.start = function () {
@@ -277,6 +279,9 @@ $(function () {
                     self.status.t0 = +new Date();
                     self.status.curBottom = getPX(self.$character.css('bottom'));
                     self.status.isChanged = false;
+                    if (!self.status.isGoingDown) {
+                        self.audioWing.play();
+                    }
                 }
                 if (self.status.isGoingDown) {
                     self.leapDown();
@@ -367,6 +372,7 @@ $(function () {
         };
 
         this.gameOver = function () {
+            this.audioHit.play();
             $('.overlay', this.$game).show();
             $('.overlay .game-over span', this.$game).html(this.status.score);
             this.status.isGameOver = true;

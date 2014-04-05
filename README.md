@@ -6,14 +6,15 @@
 
 * Add loading and instruction screen
 * Add more interesting features
-* Add gaming sound
 * Overall performance tuning
 * Integrate App Store and Google Play
 * Add Game Board support
 
 ## CHANGELOG
 
-** v0.2.0 **
+* ~~Add audio support~~
+
+**v0.2.0**
 
 
 * ~~Add advanced stair system (eg moving stairs)~~
@@ -21,7 +22,7 @@
 * ~~Save max score locally~~
 
 
-** v0.1.0 **
+**v0.1.0**
 
 
 * ~~Fix play again~~
