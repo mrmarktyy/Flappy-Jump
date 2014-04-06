@@ -14,6 +14,7 @@ A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and
 
 ## CHANGELOG
 
+* ~~ Add UA support~~
 * ~~Update project demo homepage~~
 * ~~Add audio support~~
 
