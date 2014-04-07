@@ -6,15 +6,17 @@ A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and
 
 ## Roadmaps
 
-* Add loading and instruction screen
 * Add more interesting features
-* Overall performance tuning
 * Integrate App Store and Google Play
 * Add Game Board support
 
 ## CHANGELOG
 
-* ~~ Add UA support~~
+**v0.3.0
+
+* ~~Overall performance tuning~~
+* ~~Add loading and instruction screen~~
+* ~~Add UA support~~
 * ~~Update project demo homepage~~
 * ~~Add audio support~~
 
