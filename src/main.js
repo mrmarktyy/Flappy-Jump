@@ -36,16 +36,12 @@ $(function () {
             stairToleranceDown  : 15,
             stairNumber         : 8,
             stairMoveableP      : 40,
-            stairMoveSpeed      : 4,
-
-            wingDuration        : 100
+            stairMoveSpeed      : 4
         };
 
         this.init = function (options) {
             this.setConfig();
-            this.setDOM();
             this.registerEvents();
-            this.resetStatus();
             return this;
         };
 
@@ -56,30 +52,6 @@ $(function () {
             this.config.a_up = inital.a_up;
         };
 
-        this.setDOM = function () {
-            this.$character = $('#character');
-            this.$game = $('#game');
-            this.$score = $('#score span');
-            this.$best = $('#best span');
-            this.$touchzone = $('#touchzone');
-            this.audioWing = document.getElementById('audio-wing');
-            this.audioHit = document.getElementById('audio-hit');
-        };
-
-        this.start = function () {
-            this.status.isGameOver = false;
-            this.drawStairs();
-            this.gameLoop();
-            this.characterFly();
-            this.leap();
-            return this;
-        };
-
-        this.restart = function () {
-            this.resetStatus();
-            this.start();
-        };
-
         this.registerEvents = function () {
             window.addEventListener('keydown', function(e) {
                 keyState[e.keyCode || e.which] = true;
@@ -88,7 +60,7 @@ $(function () {
             window.addEventListener('keyup', function(e) {
                 keyState[e.keyCode || e.which] = false;
             }, true);
-            this.$touchzone.on('touchstart', function (e) {
+            $(document).on('touchstart', '#touchzone', function (e) {
                 if ($(e.target).hasClass('left')) {
                     touchState['left'] = true;
                     touchState['right'] = false;
@@ -98,7 +70,7 @@ $(function () {
                     touchState['left'] = false;
                 }
             });
-            this.$touchzone.on('touchend', function (e) {
+            $(document).on('touchend', '#touchzone', function (e) {
                 if ($(e.target).hasClass('left')) {
                     touchState['left'] = false;
                 }
@@ -106,14 +78,44 @@ $(function () {
                     touchState['right'] = false;
                 }
             });
+            $(document).on('click', '#instruction .go', function () {
+                self.start();
+            });
+            $(document).on('click', '#game .again', function () {
+                self.showInstruction();
+                $('.overlay', self.$game).hide();
+            });
+        };
+
+        this.showInstruction = function () {
+            $('#game').empty().append($('#instruction-tpl').html());
+        };
+
+        this.start = function () {
+            this.setDOM();
+            this.resetStatus();
+            this.drawStairs();
+            this.gameLoop();
+            this.leap();
+            return this;
+        };
+
+        this.setDOM = function () {
+            $('#instruction').replaceWith($('#main-tpl').html());
+            this.$character = $('#character');
+            this.$game = $('#game');
+            this.$score = $('#score span');
+            this.$best = $('#best span');
+            this.audioWing = document.getElementById('audio-wing');
+            this.audioHit = document.getElementById('audio-hit');
         };
 
         this.resetStatus = function () {
             this.status = {
                 score: 0,
-                isGameOver: true,
+                isGameOver: false,
                 isGoingDown: false,
-                isChanged: true,
+                changeDirection: true,
                 t0: +new Date(),
                 bottom: 0,
                 stairsInfo: []
@@ -122,10 +124,22 @@ $(function () {
             this.$score.html(0);
             this.$best.html(this.getBest());
             this.$character
-                .attr('class', 'status-1')
+                .addClass('swing')
                 .css({
                     bottom: 0
                 });
+        };
+
+        this.gameOver = function () {
+            this.audioHit.play();
+            $('.overlay', this.$game).show();
+            $('.overlay .game-over span', this.$game).html(this.status.score);
+            this.$character.removeClass('swing');
+            this.status.isGameOver = true;
+        };
+
+        this.restart = function () {
+            this.start();
         };
 
         /************* Stairs Management *************/
@@ -254,31 +268,12 @@ $(function () {
             })();
         };
 
-        this.characterFly = function () {
-            var direction = true;
-            var fly = setInterval(function () {
-                if (self.status.isGameOver) {
-                    clearInterval(fly);
-                    return;
-                }
-                var status = parseInt(self.$character.attr('class').match(/\d/)[0], 10);
-                var num;
-                if (status === 0 || status === 2) {
-                    num = 1;
-                    direction = !direction;
-                } else {
-                    num = direction ? 0 : 2;
-                }
-                self.$character.removeClass('status-0 status-1 status-2').addClass('status-' + num);
-            }, this.config.wingDuration);
-        };
-
         this.leap = function () {
             this.interval = setInterval(function () {
-                if (self.status.isChanged) {
+                if (self.status.changeDirection) {
                     self.status.t0 = +new Date();
                     self.status.curBottom = getPX(self.$character.css('bottom'));
-                    self.status.isChanged = false;
+                    self.status.changeDirection = false;
                     if (!self.status.isGoingDown) {
                         self.audioWing.play();
                     }
@@ -301,7 +296,7 @@ $(function () {
             if (v < 0) {
                 this.updateStairsInfo();
                 this.status.isGoingDown = true;
-                this.status.isChanged = true;
+                this.status.changeDirection = true;
             } else {
                 var dh = Math.ceil(this.status.curBottom + s - this.config.boardHeight / 2);
                 if (dh > 0) {
@@ -324,7 +319,7 @@ $(function () {
                     this.gameOver();
                 } else {
                     this.status.isGoingDown = false;
-                    this.status.isChanged = true;
+                    this.status.changeDirection = true;
                 }
             } else {
                 this.$character.css('bottom', bottom + 'px');
@@ -356,7 +351,7 @@ $(function () {
             if (result) {
                 this.updateScore(result);
                 this.status.isGoingDown = false;
-                this.status.isChanged = true;
+                this.status.changeDirection = true;
             }
         };
 
@@ -369,17 +364,6 @@ $(function () {
             if (this.getBest() < score) {
                 this.setBest(score);
             }
-        };
-
-        this.gameOver = function () {
-            this.audioHit.play();
-            $('.overlay', this.$game).show();
-            $('.overlay .game-over span', this.$game).html(this.status.score);
-            this.status.isGameOver = true;
-            this.$game.on('click', '.again', function () {
-                self.restart();
-                $('.overlay', self.$game).hide();
-            });
         };
 
         this.getBest = function () {
