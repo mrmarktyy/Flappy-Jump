@@ -12,7 +12,7 @@ A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and
 
 ## CHANGELOG
 
-**v0.3.0
+**v0.3.0**
 
 * ~~Overall performance tuning~~
 * ~~Add loading and instruction screen~~
