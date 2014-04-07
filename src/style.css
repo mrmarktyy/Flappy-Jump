@@ -9,7 +9,7 @@ body {
     color: white;
 }
 .header .container {
-    padding: 30px 0;
+    padding: 10px 0;
     width: 720px;
 }
 .header .container a {
@@ -124,11 +124,6 @@ body {
 .chitika {
     text-align: center;
     margin: 10px 0;
-}
-.footer {
-    width: 100%;
-    background: #fefefe;
-    text-align: center;
 }
 #fork-me {
     position: absolute;
