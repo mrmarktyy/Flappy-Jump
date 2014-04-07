@@ -2,8 +2,7 @@ module.exports = function (grunt) {
     var bannerContent = '/* \n' +
         ' * <%= pkg.name %> v<%= pkg.version %> \n' +
         ' * Author: @<%= pkg.author %> \n' +
-        ' * Date: <%= grunt.template.today("yyyy-mm-dd") %> \n' +
-        ' * Url: <%= pkg.url %> \n' +
+        ' * Url: <%= pkg.repository.url %> \n' +
         ' * Licensed under the <%= pkg.license %> license\n' +
         ' */\n';
 

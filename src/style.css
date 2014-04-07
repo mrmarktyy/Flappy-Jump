@@ -128,6 +128,10 @@ body {
     border-radius: 8px;
     transition: left 40ms linear, bottom 20ms linear;
 }
+.chitika {
+    text-align: center;
+    margin: 10px 0;
+}
 .footer {
     width: 100%;
     background: #fefefe;
