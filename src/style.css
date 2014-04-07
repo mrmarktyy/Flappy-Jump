@@ -125,6 +125,9 @@ body {
     text-align: center;
     margin: 10px 0;
 }
+template {
+    display: none;
+}
 #fork-me {
     position: absolute;
     top: 0;

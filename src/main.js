@@ -60,7 +60,7 @@ $(function () {
             window.addEventListener('keyup', function(e) {
                 keyState[e.keyCode || e.which] = false;
             }, true);
-            $(document).on('touchstart', '#touchzone', function (e) {
+            $(document).on('touchstart mousedown', '#touchzone', function (e) {
                 if ($(e.target).hasClass('left')) {
                     touchState['left'] = true;
                     touchState['right'] = false;
@@ -70,7 +70,7 @@ $(function () {
                     touchState['left'] = false;
                 }
             });
-            $(document).on('touchend', '#touchzone', function (e) {
+            $(document).on('touchend mouseup', '#touchzone', function (e) {
                 if ($(e.target).hasClass('left')) {
                     touchState['left'] = false;
                 }
