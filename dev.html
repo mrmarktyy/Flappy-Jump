@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>mBounce</title>
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h2>mBounce</h2>
+            <p>A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and Android touch devices.</p>
+            <p>Please report any issues or bugs to <a href="https://github.com/mrmarktyy/mBounce/issues">here</a>. Have fun ;)</p>
+        </div>
+    </div>
+    <div class="container">
+        <a href="https://github.com/mrmarktyy/mBounce">
+            <img id="fork-me" alt="Fork me on GitHub" src="image/forkme.png">
+        </a>
+        <div id="game">
+            <div class="overlay">
+                <div class="game-over">
+                    GAME OVER!
+                    <p>Your Score: <span></span></p>
+                </div>
+                <div class="again">Try Again</div>
+            </div>
+            <div class="score">
+                <div id="score">Score:<span>0</span></div>
+                <div id="best">Best Score:<span></span></div>
+            </div>
+            <div id="touchzone">
+                <div class="left"></div>
+                <div class="right"></div>
+            </div>
+            <div id="character" class="status-1"></div>
+        </div>
+    </div>
+    <div class="footer">
+        Created And Maintained By <a href="http://github.com/mrmarktyy">Mark Zhou</a>
+    </div>
+    <audio id="audio-wing" preload="auto" src="audio/wing.wav"></audio>
+    <audio id="audio-hit" preload="auto" src="audio/hit.wav"></audio>
+    <script src="dist/jquery.min.js"></script>
+    <script src="src/main.js"></script>
+    <script>
+        $(function () {
+            var myGame = new Game().start();
+        });
+    </script>
+    <script type="text/javascript">
+        /*** CHITIKA Code ***/
+        (function() {
+            if (window.CHITIKA === undefined) { window.CHITIKA = { 'units' : [] }; };
+            var unit = {"publisher":"mrmarktyy","width":468,"height":90,"sid":"Chitika Default"};
+            var placement_id = window.CHITIKA.units.length;
+            window.CHITIKA.units.push(unit);
+            document.write('<div id="chitikaAdBlock-' + placement_id + '"></div>');
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '//cdn.chitika.net/getads.js';
+            try { document.getElementsByTagName('head')[0].appendChild(s); } catch(e) { document.write(s.outerHTML); }
+        }());
+    </script>
+</body>
+</html>
