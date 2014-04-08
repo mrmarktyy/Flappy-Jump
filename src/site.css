@@ -18,7 +18,7 @@ body {
     width: 980px;
     margin: 0 auto;
 }
-iframe {
+#game-iframe {
     width: 320px;
     height: 500px;
     position: relative;

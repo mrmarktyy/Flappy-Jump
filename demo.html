@@ -20,22 +20,22 @@
         </div>
     </div>
     <div class="container">
-        <iframe src="index.html" frameborder="0" scrolling="no"></iframe>
+        <iframe id="game-iframe" src="index.html" frameborder="0" scrolling="no"></iframe>
+        <script type="text/javascript">
+            /*** CHITIKA Code ***/
+            (function() {
+                if (window.CHITIKA === undefined) { window.CHITIKA = { 'units' : [] }; };
+                var unit = {"publisher":"mrmarktyy","width":468,"height":90,"sid":"Chitika Default"};
+                var placement_id = window.CHITIKA.units.length;
+                window.CHITIKA.units.push(unit);
+                document.write('<div class="chitika" id="chitikaAdBlock-' + placement_id + '"></div>');
+                var s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.src = '//cdn.chitika.net/getads.js';
+                try { document.getElementsByTagName('head')[0].appendChild(s); } catch(e) { document.write(s.outerHTML); }
+            }());
+        </script>
     </div>
-    <script type="text/javascript">
-        /*** CHITIKA Code ***/
-        (function() {
-            if (window.CHITIKA === undefined) { window.CHITIKA = { 'units' : [] }; };
-            var unit = {"publisher":"mrmarktyy","width":468,"height":90,"sid":"Chitika Default"};
-            var placement_id = window.CHITIKA.units.length;
-            window.CHITIKA.units.push(unit);
-            document.write('<div class="chitika" id="chitikaAdBlock-' + placement_id + '"></div>');
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = '//cdn.chitika.net/getads.js';
-            try { document.getElementsByTagName('head')[0].appendChild(s); } catch(e) { document.write(s.outerHTML); }
-        }());
-    </script>
     <script>
         /*** UA Code ***/
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
