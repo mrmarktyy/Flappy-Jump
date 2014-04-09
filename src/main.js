@@ -108,6 +108,11 @@ $(function () {
             this.$best = $('#best span');
             this.audioWing = document.getElementById('audio-wing');
             this.audioHit = document.getElementById('audio-hit');
+            // Hack for mobile device
+            this.audioWing.play();
+            this.audioWing.pause();
+            this.audioHit.play();
+            this.audioWing.pause();
         };
 
         this.resetStatus = function () {
