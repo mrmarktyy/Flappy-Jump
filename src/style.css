@@ -1,6 +1,3 @@
-html {
-
-}
 body {
     margin: 0;
     font-family: Helvetica, Georgia, Consolas;
@@ -105,7 +102,7 @@ body {
     background-color: #bada55;
     height: 15px;
     border-radius: 8px;
-    transition: left 40ms linear, bottom 20ms linear;
+    transition: left 50ms linear, bottom 50ms linear;
 }
 template {
     display: none;

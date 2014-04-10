@@ -5,22 +5,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>mBounce</title>
-    <link rel="stylesheet" href="src/site.css">
+    <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
-    <div class="header">
-        <a href="https://github.com/mrmarktyy/mBounce">
-            <img id="fork-me" alt="Fork me on GitHub" src="image/forkme.png">
-        </a>
-        <div class="container">
-            <h2>mBounce</h2>
-            <p>A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and Android touch devices.</p>
-            <p>Please report any issues or bugs to <a href="https://github.com/mrmarktyy/mBounce/issues">here</a>. Have fun ;)</p>
-            <p>Created and maintained By <a href="http://github.com/mrmarktyy">Mark Zhou</a></p>
+    <div id="game">
+        <div id="loading">
+            <div class="text">Loading ...</div>
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
         </div>
     </div>
-    <div class="container">
-        <iframe id="game-iframe" src="index.html" frameborder="0" scrolling="no"></iframe>
-    </div>
+    <audio id="audio-wing" preload="auto" src="audio/wing.wav"></audio>
+    <audio id="audio-hit" preload="auto" src="audio/hit.wav"></audio>
+    <template id="instruction-tpl">
+        <div id="instruction">
+            <h2>Get Ready !</h2>
+            <div id="character" class="flying"></div>
+            <p><img src="image/controls.png"></p>
+            <div class="go">Go</div>
+        </div>
+    </template>
+    <template id="main-tpl">
+        <div class="overlay">
+            <div class="game-over">
+                GAME OVER!
+                <p>Your Score: <span></span></p>
+            </div>
+            <div class="again">Try Again</div>
+        </div>
+        <div class="score">
+            <div id="score">Score: <span>0</span></div>
+            <div id="best">Best Score: <span></span></div>
+        </div>
+        <div id="touchzone">
+            <div class="left"></div>
+            <div class="right"></div>
+        </div>
+        <div id="character"></div>
+    </template>
+    <script src="dist/jquery.min.js"></script>
+    <script src="src/main.js"></script>
+    <script>
+        $(function () {
+            var myGame = new Game().showInstruction();
+        });
+    </script>
 </body>
 </html>

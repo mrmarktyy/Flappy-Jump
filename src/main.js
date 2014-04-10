@@ -24,7 +24,7 @@ $(function () {
             leapUp              : 100,
             leapDuration        : 0.6,
             leapLeft            : 10,
-            leapInterval        : 30,
+            leapInterval        : 50,
 
             stairWidthMin       : 40,
             stairWidthMax       : 100,
@@ -33,9 +33,9 @@ $(function () {
             stairHeight         : 15,
             stairHeightDiff     : 60,
             stairToleranceUp    : 5,
-            stairToleranceDown  : 15,
+            stairToleranceDown  : 5,
             stairNumber         : 8,
-            stairMoveableP      : 40,
+            stairP              : 40,
             stairMoveSpeed      : 4
         };
 
@@ -60,7 +60,7 @@ $(function () {
             window.addEventListener('keyup', function(e) {
                 keyState[e.keyCode || e.which] = false;
             }, true);
-            $(document).on('touchstart mousedown', '#touchzone', function (e) {
+            $(document).on('touchstart', '#touchzone', function (e) {
                 if ($(e.target).hasClass('left')) {
                     touchState['left'] = true;
                     touchState['right'] = false;
@@ -70,7 +70,7 @@ $(function () {
                     touchState['left'] = false;
                 }
             });
-            $(document).on('touchend mouseup', '#touchzone', function (e) {
+            $(document).on('touchend', '#touchzone', function (e) {
                 if ($(e.target).hasClass('left')) {
                     touchState['left'] = false;
                 }
@@ -112,7 +112,7 @@ $(function () {
             this.audioWing.play();
             this.audioWing.pause();
             this.audioHit.play();
-            this.audioWing.pause();
+            this.audioHit.pause();
         };
 
         this.resetStatus = function () {
@@ -129,10 +129,7 @@ $(function () {
             this.$score.html(0);
             this.$best.html(this.getBest());
             this.$character
-                .addClass('swing')
-                .css({
-                    bottom: 0
-                });
+                .addClass('swing');
         };
 
         this.gameOver = function () {
@@ -141,10 +138,6 @@ $(function () {
             $('.overlay .game-over span', this.$game).html(this.status.score);
             this.$character.removeClass('swing');
             this.status.isGameOver = true;
-        };
-
-        this.restart = function () {
-            this.start();
         };
 
         /************* Stairs Management *************/
@@ -172,7 +165,7 @@ $(function () {
                 left_min: left,
                 left_max: left + width
             };
-            if (index > 10 && getRandomInt(1, 100) <= this.config.stairMoveableP) {
+            if (index > 10 && getRandomInt(1, 100) <= this.config.stairP) {
                 stair.moveable = true;
                 stair.direction = width % 2 ? true : false; // true: go left, false: go right
             }
@@ -218,6 +211,16 @@ $(function () {
                 var newStair = self.createStair(lastStair.index + 1, lastStair.top + self.config.stairHeightDiff);
                 self.$game.prepend(newStair);
             });
+        };
+
+        this.stairUpCheck = function (curBottom) {
+            var curLeft = getPX(this.$character.css('left'));
+            var result = this.checkStairUp(curBottom, curLeft + this.config.characterWidth / 2);
+            if (result) {
+                this.updateScore(result);
+                this.status.isGoingDown = false;
+                this.status.changeDirection = true;
+            }
         };
 
         this.checkStairUp = function (bottom, left) {
@@ -348,16 +351,6 @@ $(function () {
                 }
             }
             this.$character.css('left', l);
-        };
-
-        this.stairUpCheck = function (curBottom) {
-            var curLeft = getPX(this.$character.css('left'));
-            var result = this.checkStairUp(curBottom, curLeft + this.config.characterWidth / 2);
-            if (result) {
-                this.updateScore(result);
-                this.status.isGoingDown = false;
-                this.status.changeDirection = true;
-            }
         };
 
         this.updateScore = function (stair) {
