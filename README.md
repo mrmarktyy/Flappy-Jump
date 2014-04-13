@@ -12,6 +12,7 @@ A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and
 
 ## CHANGELOG
 
+* ~~Basic device orientation support~~
 * ~~Isolate game into an iframe~~
 
 **v0.3.0**
