@@ -21,8 +21,8 @@ $(function () {
             characterWidth      : 42,
             characterHeight     : 30,
 
-            leapUp              : 100,
-            leapDuration        : 0.6,
+            leapUp              : 120,
+            leapDuration        : 0.7,
             leapLeft            : 10,
             leapInterval        : 50,
 
@@ -31,7 +31,7 @@ $(function () {
             stairLeftMin        : 0,
             stairLeftMax        : 220, // boardWidth - stairWidthMax
             stairHeight         : 15,
-            stairHeightDiff     : 60,
+            stairHeightDiff     : 80,
             stairToleranceUp    : 5,
             stairToleranceDown  : 15,
             stairNumber         : 8,

@@ -102,7 +102,7 @@ body {
     background-color: #bada55;
     height: 15px;
     border-radius: 8px;
-    transition: left 50ms linear, bottom 50ms linear;
+    transition: left 20ms linear, bottom 50ms linear;
 }
 template {
     display: none;
