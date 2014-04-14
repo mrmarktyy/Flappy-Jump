@@ -99,9 +99,12 @@ body {
 }
 .stair {
     position: absolute;
-    background-color: #bada55;
-    height: 15px;
-    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-top: 10px solid #bada55;
+    border-bottom: 20px solid #393213;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
     transition: left 20ms linear, bottom 50ms linear;
 }
 template {
