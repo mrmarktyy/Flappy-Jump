@@ -4,8 +4,6 @@ body {
 }
 #game {
     font-family: 'SpecialElite', Helvetica, Georgia;
-    width: 320px;
-    height: 480px;
     position: relative;
     overflow: hidden;
     margin: 0;
@@ -111,21 +109,21 @@ template {
     display: none;
 }
 /************************
- * Instruction
+ * Menu
  ************************/
-#instruction h2 {
+#menu h2 {
     color: white;
     top: 30px;
     position: relative;
     text-align: center;
     font-size: 3em;
 }
-#instruction p {
+#menu p {
     position: relative;
     top: 120px;
     text-align: center;
 }
-#instruction .go {
+#menu .go {
     color: white;
     background-color: transparent;
     top: 130px;
@@ -139,8 +137,8 @@ template {
     text-align: center;
     cursor: pointer;
 }
-#instruction .go:hover,
-#instruction .go:active {
+#menu .go:hover,
+#menu .go:active {
     opacity: 1;
 }
 #character.flying {

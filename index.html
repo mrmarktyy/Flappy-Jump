@@ -20,8 +20,8 @@
     </div>
     <audio id="audio-wing" preload="auto" src="audio/wing.wav"></audio>
     <audio id="audio-hit" preload="auto" src="audio/hit.wav"></audio>
-    <template id="instruction-tpl">
-        <div id="instruction">
+    <template id="menu-tpl">
+        <div id="menu">
             <h2>Get Ready !</h2>
             <div id="character" class="flying"></div>
             <p><img src="image/controls.png"></p>
@@ -50,7 +50,7 @@
     <script src="dist/main.min.js"></script>
     <script>
         $(function () {
-            var myGame = new Game().showInstruction();
+            var myGame = new Game().showMenu();
         });
     </script>
 </body>

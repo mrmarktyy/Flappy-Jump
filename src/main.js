@@ -1,6 +1,8 @@
 $(function () {
     'use strict';
 
+    var VIEWPORT_DESKTOP_MINWIDTH = 1000;
+
     var Game = function (options) {
 
         var rAF = (function(){
@@ -21,7 +23,7 @@ $(function () {
             characterWidth      : 42,
             characterHeight     : 30,
 
-            leapUp              : 140,
+            leapHeight          : 140,
             leapDuration        : 0.7,
             leapLeft            : 10,
             leapInterval        : 50,
@@ -40,13 +42,32 @@ $(function () {
         };
 
         this.init = function (options) {
+            this.$game = $('#game');
             this.setConfig();
+            this.$game.css({
+                height: this.config.boardHeight,
+                width: this.config.boardWidth
+            });
             this.registerEvents();
             return this;
         };
 
         this.setConfig = function () {
-            var inital = getVA(this.config.leapDuration, this.config.leapUp);
+            this.setViewPort();
+            this.setVA(this.config.leapDuration, this.config.leapHeight);
+        };
+
+        this.setViewPort = function () {
+            var viewportWidth = $(window).width();
+            var viewportHeight = $(window).height();
+            if (viewportWidth < VIEWPORT_DESKTOP_MINWIDTH) {
+                this.config.boardWidth = viewportWidth;
+                this.config.boardHeight = viewportHeight;
+            }
+        };
+
+        this.setVA = function (t, s) {
+            var inital = getVA(t, s);
             this.config.v0 = inital.v;
             this.config.a_down = inital.a_down;
             this.config.a_up = inital.a_up;
@@ -62,10 +83,10 @@ $(function () {
             }, true);
             if (window.DeviceOrientationEvent) {
                 window.addEventListener('deviceorientation', function (e) {
-                    if (e.gamma < -10) {
+                    if (e.gamma < -20) {
                         movementState['left'] = true;
                         movementState['right'] = false;
-                    } else if (e.gamma > 10) {
+                    } else if (e.gamma > 20) {
                         movementState['right'] = true;
                         movementState['left'] = false;
                     } else {
@@ -92,17 +113,17 @@ $(function () {
                     movementState['right'] = false;
                 }
             });
-            $(document).on('click', '#instruction .go', function () {
+            $(document).on('click', '#menu .go', function () {
                 self.start();
             });
             $(document).on('click', '#game .again', function () {
-                self.showInstruction();
+                self.showMenu();
                 $('.overlay', self.$game).hide();
             });
         };
 
-        this.showInstruction = function () {
-            $('#game').empty().append($('#instruction-tpl').html());
+        this.showMenu = function () {
+            $('#game').empty().append($('#menu-tpl').html());
         };
 
         this.start = function () {
@@ -115,9 +136,8 @@ $(function () {
         };
 
         this.setDOM = function () {
-            $('#instruction').replaceWith($('#main-tpl').html());
+            $('#menu').replaceWith($('#main-tpl').html());
             this.$character = $('#character');
-            this.$game = $('#game');
             this.$score = $('#score span');
             this.$best = $('#best span');
             this.audioWing = document.getElementById('audio-wing');
@@ -294,6 +314,7 @@ $(function () {
         };
 
         this.leap = function () {
+            this.times = 0;
             this.interval = setInterval(function () {
                 if (self.status.changeDirection) {
                     self.status.t0 = +new Date();
