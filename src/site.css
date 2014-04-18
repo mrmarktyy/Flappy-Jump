@@ -2,6 +2,12 @@ body {
     margin: 0;
     font-family: Helvetica, Georgia, Consolas;
 }
+a,
+a:hover,
+a:active,
+a:focus {
+    color: white;
+}
 .header {
     width: 100%;
     height: 200px;
@@ -11,21 +17,18 @@ body {
 .header .container {
     padding: 10px 0;
 }
-.header .container a {
-    color: white;
-}
 .container {
     width: 980px;
     margin: 0 auto;
 }
 #game-iframe {
     width: 320px;
-    height: 500px;
+    height: 480px;
     position: relative;
     margin-top: 50px;
     left: 330px;
 }
-.google-adsense {
+#adsense-iframe {
     width: 100%;
 }
 #fork-me {
