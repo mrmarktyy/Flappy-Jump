@@ -26,7 +26,7 @@ body {
     left: 330px;
 }
 .google-adsense {
-    text-align: center;
+    width: 100%;
 }
 #fork-me {
     position: absolute;
