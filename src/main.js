@@ -63,6 +63,7 @@ $(function () {
             if (viewportWidth < VIEWPORT_DESKTOP_MINWIDTH) {
                 this.config.boardWidth = viewportWidth;
                 this.config.boardHeight = viewportHeight;
+                this.config.stairLeftMax = this.config.boardWidth - this.config.stairWidthMax;
             }
         };
 
