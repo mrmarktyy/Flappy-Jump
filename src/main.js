@@ -22,6 +22,8 @@ $(function () {
             boardHeight         : 480,
             characterWidth      : 42,
             characterHeight     : 30,
+            gammaLeft           : -25,
+            gammaRight          : 25,
 
             leapHeight          : 140,
             leapDuration        : 0.7,
@@ -75,19 +77,19 @@ $(function () {
         };
 
         this.registerEvents = function () {
-            window.addEventListener('keydown', function(e) {
+            window.addEventListener('keydown', function (e) {
                 keyState[e.keyCode || e.which] = true;
             }, true);
 
-            window.addEventListener('keyup', function(e) {
+            window.addEventListener('keyup', function (e) {
                 keyState[e.keyCode || e.which] = false;
             }, true);
             if (window.DeviceOrientationEvent) {
                 window.addEventListener('deviceorientation', function (e) {
-                    if (e.gamma < -20) {
+                    if (e.gamma < self.config.gammaLeft) {
                         movementState['left'] = true;
                         movementState['right'] = false;
-                    } else if (e.gamma > 20) {
+                    } else if (e.gamma > self.config.gammaRight) {
                         movementState['right'] = true;
                         movementState['left'] = false;
                     } else {
@@ -101,7 +103,6 @@ $(function () {
             });
             $(document).on('click', '#game .again', function () {
                 self.showMenu();
-                $('.overlay', self.$game).hide();
             });
         };
 

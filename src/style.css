@@ -1,6 +1,5 @@
 body {
     margin: 0;
-    font-family: Helvetica, Georgia, Consolas;
 }
 #game {
     font-family: 'SpecialElite', Helvetica, Georgia;
@@ -53,7 +52,7 @@ body {
     position: absolute;
     bottom: 0;
     left: 145px;
-    transition: left 50ms linear, bottom 50ms ease;
+    transition: left 40ms linear, bottom 50ms ease;
     background: url('../image/flappy.png') no-repeat;
     background-size: 1024px 1024px;
     background-position: -336px -31px;
@@ -113,21 +112,19 @@ template {
     top: 130px;
     width: 100px;
     margin: 0 auto;
-    opacity: 0.5;
-    transition: opacity 0.3s;
+    opacity: 0.6;
     position: relative;
     padding: 12px 10px 8px;
     border: 2px solid white;
     text-align: center;
     cursor: pointer;
 }
-#menu .go:hover,
-#menu .go:active {
+#menu .go:hover {
     opacity: 1;
 }
-#character.flying {
-    animation: flying 1s infinite ease-in-out, swing 500ms infinite step-end;
-    -webkit-animation: flying 1s infinite ease-in-out, swing 500ms infinite step-end;
+#character.fly {
+    animation: fly 1s infinite ease-in-out, swing 500ms infinite step-end;
+    -webkit-animation: fly 1s infinite ease-in-out, swing 500ms infinite step-end;
 }
 #character.swing {
     animation: swing 300ms infinite step-end;
@@ -136,7 +133,7 @@ template {
 /************************
  * Key Frames
  ************************/
-@-webkit-keyframes flying {
+@-webkit-keyframes fly {
     0% { top: 30%; }
     50% { top: 40%; }
     100% { top: 30%; }
