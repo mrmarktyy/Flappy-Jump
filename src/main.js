@@ -42,8 +42,8 @@ $(function () {
         };
 
         this.init = function (options) {
-            this.$game = $('#game');
             this.setConfig();
+            this.$game = $('#game');
             this.$game.css({
                 height: this.config.boardHeight,
                 width: this.config.boardWidth
@@ -96,24 +96,6 @@ $(function () {
                     }
                 }, false);
             }
-            $(document).on('touchstart', '#touchzone', function (e) {
-                if ($(e.target).hasClass('left')) {
-                    movementState['left'] = true;
-                    movementState['right'] = false;
-                }
-                if ($(e.target).hasClass('right')) {
-                    movementState['right'] = true;
-                    movementState['left'] = false;
-                }
-            });
-            $(document).on('touchend', '#touchzone', function (e) {
-                if ($(e.target).hasClass('left')) {
-                    movementState['left'] = false;
-                }
-                if ($(e.target).hasClass('right')) {
-                    movementState['right'] = false;
-                }
-            });
             $(document).on('click', '#menu .go', function () {
                 self.start();
             });

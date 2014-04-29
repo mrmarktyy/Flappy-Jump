@@ -14,6 +14,7 @@ Apple Store and Google Play coming soon.
 
 ## CHANGELOG
 
+* ~~Remove touch events support, only relying on deviceorientation events~~
 * ~~Don't rotate to landscape on mobile device~~
 
 **v0.4.0**
