@@ -14,6 +14,8 @@ Apple Store and Google Play coming soon.
 
 ## CHANGELOG
 
+* ~~Don't rotate to landscape on mobile device~~
+
 **v0.4.0**
 
 * ~~Fix rendering issue on different viewports~~
