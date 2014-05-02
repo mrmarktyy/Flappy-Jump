@@ -1,3 +1,4 @@
+/*globals $*/
 $(function () {
     'use strict';
 
@@ -5,11 +6,11 @@ $(function () {
 
     var Game = function (options) {
 
-        var rAF = (function(){
+        var rAF = (function () {
             return  window.requestAnimationFrame   ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame    ||
-                function(callback){
+                function (callback) {
                     window.setTimeout(callback, 1000 / 60);
                 };
         })(),
@@ -30,10 +31,9 @@ $(function () {
             leapLeft            : 10,
             leapInterval        : 50,
 
-            stairWidthMin       : 40,
-            stairWidthMax       : 100,
+            stairWidth          : 80,
             stairLeftMin        : 0,
-            stairLeftMax        : 220, // boardWidth - stairWidthMax
+            stairLeftMax        : 220, // boardWidth - stairWidth
             stairHeight         : 30,
             stairHeightDiff     : 100,
             stairToleranceUp    : 5,
@@ -65,7 +65,7 @@ $(function () {
             if (viewportWidth < VIEWPORT_DESKTOP_MINWIDTH) {
                 this.config.boardWidth = viewportWidth;
                 this.config.boardHeight = viewportHeight;
-                this.config.stairLeftMax = this.config.boardWidth - this.config.stairWidthMax;
+                this.config.stairLeftMax = this.config.boardWidth - this.config.stairWidth;
             }
         };
 
@@ -164,7 +164,7 @@ $(function () {
 
         this.drawStairs = function () {
             var stairs = [];
-            for(var i = 0; i < this.config.stairNumber; i++) {
+            for (var i = 0; i < this.config.stairNumber; i++) {
                 stairs.push(this.createStair(i, (i + 1) * this.config.stairHeightDiff));
             }
             this.$game.prepend(stairs);
@@ -175,7 +175,7 @@ $(function () {
         };
 
         this.createStair = function (index, bottom) {
-            var width = getRandomInt(this.config.stairWidthMin, this.config.stairWidthMax);
+            var width = this.config.stairWidth;
             var left = getRandomInt(this.config.stairLeftMin, this.config.stairLeftMax);
             var stair = {
                 index: index,
@@ -288,7 +288,7 @@ $(function () {
         /************* Stairs Management End *************/
 
         this.gameLoop = function () {
-            (function loop () {
+            (function loop() {
                 if (!self.status.isGameOver) {
                     rAF(loop);
                 }
