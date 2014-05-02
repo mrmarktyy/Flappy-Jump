@@ -52,7 +52,7 @@ body {
     position: absolute;
     bottom: 0;
     left: 145px;
-    transition: left 40ms linear, bottom 50ms ease;
+    transition: left 50ms linear, bottom 80ms ease;
     background: url('../image/flappy.png') no-repeat;
     background-size: 1024px 1024px;
     background-position: -336px -31px;
@@ -86,7 +86,7 @@ body {
     border-bottom: 20px solid #393213;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
-    transition: left 20ms linear, bottom 50ms linear;
+    transition: left 20ms linear, bottom 80ms linear;
 }
 template {
     display: none;
