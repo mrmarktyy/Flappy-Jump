@@ -4,18 +4,10 @@ A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and
 
 [Please try and play the game here](http://games.tantanguanguan.com/mBounce/demo.html)
 
-Apple Store and Google Play coming soon.
-
 ## Roadmaps
 
-* Fix background and stair management issue where rendering in different viewports
-* Performance tweaks
 * Replace theme with customised images
-* Seamless adsense integration
-
 * Add more interesting features
-* Release in App Store and Google Play
-* Add Leaderboard support
 
 ## CHANGELOG
 
