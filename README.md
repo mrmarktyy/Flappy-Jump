@@ -2,7 +2,7 @@
 
 A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and Android touch devices.
 
-[Please try and play the game here](http://games.tantanguanguan.com/mBounce/demo.html)
+[Please try and play the game here](http://games.tantanguanguan.com/mBounce/)
 
 ## Roadmaps
 
@@ -10,6 +10,8 @@ A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and
 * Add more interesting features
 
 ## CHANGELOG
+
+**v0.5.0
 
 * ~~Remove touch events support, only relying on deviceorientation events~~
 * ~~Don't rotate to landscape on mobile device~~

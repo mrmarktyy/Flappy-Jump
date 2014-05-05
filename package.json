@@ -1,6 +1,6 @@
 {
   "name": "mBounce",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Simple bouncing game",
   "main": "index.html",
   "scripts": {
