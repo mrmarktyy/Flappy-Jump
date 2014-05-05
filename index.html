@@ -5,49 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>mBounce</title>
-    <link rel="stylesheet" href="dist/style.min.css">
+    <link rel="stylesheet" href="src/site.css">
 </head>
 <body>
-    <div id="game">
-        <div id="loading">
-            <div class="text">Loading ...</div>
-            <div class="spinner">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
-            </div>
+    <div class="header">
+        <a href="https://github.com/mrmarktyy/mBounce">
+            <img id="fork-me" alt="Fork me on GitHub" src="image/forkme.png">
+        </a>
+        <div class="container">
+            <h2>mBounce</h2>
+            <p>A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and Android touch devices.</p>
+            <p>Please report any issues or bugs to <a href="https://github.com/mrmarktyy/mBounce/issues">here</a>. Have fun ;)</p>
+            <p>Created and maintained By <a href="http://github.com/mrmarktyy">Mark Zhou</a></p>
         </div>
     </div>
-    <audio id="audio-wing" preload="auto" src="audio/wing.wav"></audio>
-    <audio id="audio-hit" preload="auto" src="audio/hit.wav"></audio>
-    <template id="menu-tpl">
-        <div id="menu">
-            <h2>Get Ready !</h2>
-            <div id="character" class="fly"></div>
-            <p><img src="image/controls.png"></p>
-            <div class="go">Go</div>
-        </div>
-    </template>
-    <template id="main-tpl">
-        <div class="overlay">
-            <div class="game-over">
-                GAME OVER!
-                <p>Your Score: <span></span></p>
-            </div>
-            <div class="again">Try Again</div>
-        </div>
-        <div class="score">
-            <div id="score">Score: <span>0</span></div>
-            <div id="best">Best Score: <span></span></div>
-        </div>
-        <div id="character"></div>
-    </template>
-    <script src="dist/jquery.min.js"></script>
-    <script src="dist/main.min.js"></script>
+    <div class="container">
+        <iframe id="game-iframe" src="game.html" frameborder="0" scrolling="no"></iframe>
+        <iframe id="adsense-iframe" src="adsense.html" frameborder="0" scrolling="0"></iframe>
+    </div>
     <script>
-        $(function () {
-            var myGame = new Game().showMenu();
-        });
+        /*** UA Code ***/
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-49734880-1', 'tantanguanguan.com');
+        ga('send', 'pageview');
     </script>
 </body>
 </html>
