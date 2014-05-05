@@ -11,7 +11,7 @@ A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and
 
 ## CHANGELOG
 
-**v0.5.0
+**v0.5.0**
 
 * ~~Remove touch events support, only relying on deviceorientation events~~
 * ~~Don't rotate to landscape on mobile device~~
