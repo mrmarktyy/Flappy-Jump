@@ -1,5 +1,5 @@
 {
-  "name": "mBounce",
+  "name": "Flappy-Jump",
   "version": "0.5.0",
   "description": "Simple bouncing game",
   "main": "index.html",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mrmarktyy/mBounce.git"
+    "url": "git://github.com/mrmarktyy/Flappy-Jump.git"
   },
   "keywords": [
     "html5",
@@ -17,9 +17,9 @@
   "author": "Mark Zhou",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mrmarktyy/mBounce/issues"
+    "url": "https://github.com/mrmarktyy/Flappy-Jump/issues"
   },
-  "homepage": "https://github.com/mrmarktyy/mBounce",
+  "homepage": "https://github.com/mrmarktyy/Flappy-Jump",
   "devDependencies": {
     "grunt": "^0.4.4",
     "grunt-contrib-cssmin": "^0.9.0",

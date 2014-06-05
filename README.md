@@ -2,7 +2,7 @@
 
 A simple and stupid Web Based HTML5 game which works on modern browsers, iOS and Android touch devices.
 
-[Please try and play the game here](http://games.tantanguanguan.com/mBounce/)
+[Please try and play the game here](http://games.tantanguanguan.com/flappy-jump/)
 
 ## Roadmaps
 
